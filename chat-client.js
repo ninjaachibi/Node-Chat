@@ -11,11 +11,18 @@ socket.on('disconnect', function () {
 socket.on('connect', () => {
     console.log(chalk.red('=== start chatting ==='));
     username = process.argv[2];
+
+    socket.emit('user_joined', username)
 })
 socket.on('message', (data) => {
     const { cmd, username } = data
     console.log(chalk.green(username + ': ' + cmd.split('\n')[0]));
-    
+})
+socket.on('user_joined', (data) => {
+    console.log(chalk.blue(`${data} joined the game`))
+    if(!username) {
+        username = data
+    }
 })
 repl.start({
     prompt: '',
